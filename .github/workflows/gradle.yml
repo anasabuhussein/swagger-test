@@ -28,10 +28,10 @@ jobs:
       run: micronaut-openbanking-boilerplate/gradlew -p micronaut-openbanking-boilerplate  build
     - name: Build java script client 
       run: micronaut-openbanking-boilerplate/swagger-code-gen-v4.sh -l javascript
-    - name: Deploy
-      uses: anasabuhussein/swagger-test/micronaut-openbanking-boilerplate@main
-      env:
-        REPO: self
-        BRANCH: gh-pages
-        FOLDER: build
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#     - name: Deploy
+#       uses: anasabuhussein/swagger-test/micronaut-openbanking-boilerplate@main
+#       env:
+#         REPO: self
+#         BRANCH: gh-pages
+#         FOLDER: build
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
