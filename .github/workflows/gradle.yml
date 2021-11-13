@@ -23,6 +23,8 @@ jobs:
         distribution: 'adopt'
         cache: gradle
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      run: chmod +x micronaut-openbanking-boilerplate/gradlew
     - name: Build with Gradle
-      run: ./gradlew build
+      run: micronaut-openbanking-boilerplate/gradlew -p micronaut-openbanking-boilerplate  build
+    - name: Build java script client 
+      run: micronaut-openbanking-boilerplate/swagger-code-gen-v4.sh -l javascript
