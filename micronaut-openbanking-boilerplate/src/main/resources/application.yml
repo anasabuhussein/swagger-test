@@ -1,0 +1,98 @@
+micronaut:
+  application:
+    name: comOpenBankServiceBeneficiaries
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      redoc:
+        paths: classpath:META-INF/swagger/views/redoc
+        mapping: /redoc/**
+      rapidoc:
+        paths: classpath:META-INF/swagger/views/rapidoc
+        mapping: /rapidoc/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
+
+  security:
+    authentication: bearer
+    enabled: true
+    interceptUrlMap:
+      - pattern: "/swagger-ui/**"
+        httpMethod: GET
+        access:
+          - isAnonymous()
+      - pattern: "/swagger/**"
+        httpMethod: GET
+        access:
+          - isAnonymous()
+    token:
+      jwt:
+        bearer:
+          enabled: true
+        enabled: true
+        generator:
+          access-token:
+            expiration: 86400
+        signatures:
+          secret:
+            generator:
+              secret: ${JWT_TOKEN:`pleaseChangeThisSecretForANewOne`}
+
+  endpoints:
+    beans:
+      enabled: true
+      sensitive: true
+    info:
+      enabled: true
+      sensitive: false
+
+# Jackson
+jackson:
+  property-naming-strategy: UPPER_CAMEL_CASE
+
+
+# Kafka
+kafka:
+  bootstrap:
+    servers: ${KAFKA_SERVERS:`localhost:9092`}
+
+
+# LOGGER
+logger:
+  levels:
+    com.openbank: TRACE
+
+database:
+  url: ${PG_SERVER_URL:`localhost:5432`}
+  name: ${PG_DB_NAME:open-bank-beneficiary}
+
+# Database
+datasources:
+  default:
+    driverClassName: org.postgresql.Driver
+#    url: ${PG_JDBC_URL:`jdbc:postgresql://localhost:5432/open-bank-beneficiary`}
+#    url: jdbc:postgresql://host.docker.internal:5432/open-bank-beneficiary
+    url: jdbc:postgresql://${database.url}/${database.name}
+    username: ${PG_USERNAME:postgres}
+    password: ${PG_PASSWORD:secret}
+    schema-generate: NONE #CREATE_DROP #NONE
+    dialect: POSTGRES
+    #schemas: open-bank-beneficiary
+    #default-schema: open-bank-beneficiary
+
+#JPA
+jpa:
+  default:
+    package-to-scan:
+      - "com.openbank.beneficiaries.*"
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: ${HBM_2DDL:update}
+        show_sql: false
+
+## Swagger Url
+# http://localhost:8080/swagger-ui

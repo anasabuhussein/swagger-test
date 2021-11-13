@@ -1,0 +1,18 @@
+
+
+FROM openjdk:8-jdk-alpine
+WORKDIR /com-openbank-service-beneficiaries
+COPY ./build/libs/com-open-bank-service-beneficiaries-0.1-all.jar  /com-open-bank-service-beneficiaries-0.1-all.jar
+
+ENV PG_SERVER_URL=localhost:5432
+ENV PG_DB_NAME=open-bank-beneficiary
+ENV PG_USERNAME=postgres
+ENV PG_PASSWORD=secret
+ENV KAFKA_SERVERS=localhost:9092
+ENV JWT_TOKEN=pleaseChangeThisSecretForANewOne
+
+ENTRYPOINT java -Djava.security.egd=file:/dev/./urandom -DPG_SERVER_URL=${PG_SERVER_URL} -DPG_DB_NAME=${PG_DB_NAME} -DPG_USERNAME=${PG_USERNAME} -DPG_PASSWORD=${PG_PASSWORD} -DKAFKA_SERVERS=${KAFKA_SERVERS} -DJWT_TOKEN=${JWT_TOKEN} -jar /com-open-bank-service-beneficiaries-0.1-all.jar
+
+
+## How To Run ##
+# docker run -e "PG_SERVER_URL=host.docker.internal:5432" -it com-openbank-service-beneficiaries:001

@@ -1,0 +1,225 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  open-bank-beneficiary-db
+spec:
+  selector:
+    matchLabels:
+      app: open-bank-beneficiary-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: open-bank-beneficiary-db
+    spec:
+      containers:
+        - name: open-bank-beneficiary-db
+          image: postgres:12.4-alpine
+          #imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: open-bank-beneficiary
+            - name: POSTGRES_PASSWORD
+              value: secret
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  open-bank-beneficiary-adminer
+spec:
+  selector:
+    matchLabels:
+      app: open-bank-beneficiary-adminer
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: open-bank-beneficiary-adminer
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: open-bank-beneficiary-adminer
+          image: adminer:4
+          #imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-cluster
+spec:
+  selector:
+    matchLabels:
+      app: kafka-cluster
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kafka-cluster
+    spec:
+      containers:
+        - name: kafka-cluster
+          image: lensesio/fast-data-dev:2.2
+          #imagePullPolicy: Always
+          ports:
+            - name: http-2181
+              containerPort: 2181
+            - name: http-3030
+              containerPort: 3030
+            - name: http-8085
+              containerPort: 8085
+            - name: http-8086
+              containerPort: 8086
+            - name: http-8087
+              containerPort: 8087
+
+            - name: http-9581
+              containerPort: 9581
+            - name: http-9582
+              containerPort: 9582
+            - name: http-9583
+              containerPort: 9583
+            - name: http-9584
+              containerPort: 9584
+            - name: http-9585
+              containerPort: 9585
+
+            - name: http-9092
+              containerPort: 9092
+
+          env:
+            - name: ADV_HOST
+              value: host.docker.internal
+              #value: 127.0.0.1
+            - name: RUNTESTS
+              value: "0"
+            - name: FORWARDLOGS
+              value: "0"
+            - name: SAMPLEDATA
+              value: "0"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  com-openbank-service-beneficiaries-002
+spec:
+  selector:
+    matchLabels:
+      app: com-openbank-service-beneficiaries-002
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: com-openbank-service-beneficiaries-002
+    spec:
+      #restartPolicy: Always
+      containers:
+        - name: com-openbank-service-beneficiaries-002
+          image: com-openbank-service-beneficiaries:002-mini
+          #imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: PG_SERVER_URL
+              value: open-bank-beneficiary-db.default.svc.cluster.local:5432
+              #value: open-bank-beneficiary-db.default.svc.cluster.local:543ž
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open-bank-beneficiary-db
+spec:
+  selector:
+    app: open-bank-beneficiary-db
+  ports:
+    - name: http
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open-bank-beneficiary-adminer
+spec:
+  selector:
+    app: open-bank-beneficiary-adminer
+  ports:
+    - name: http
+      port: 8082
+      targetPort: 8080
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-cluster
+spec:
+  selector:
+    app: kafka-cluster
+  ports:
+    - name: http-2181
+      port: 2181
+      targetPort: 2181
+    - name: http-3030
+      port: 3030
+      targetPort: 3030
+
+    - name: http-8085
+      port: 8085
+      targetPort: 8085
+    - name: http-8086
+      port: 8086
+      targetPort: 8086
+    - name: http-8087
+      port: 8087
+      targetPort: 8087
+
+    - name: http-9581
+      port: 9581
+      targetPort: 9581
+    - name: http-9582
+      port: 9582
+      targetPort: 9582
+    - name: http-9583
+      port: 9583
+      targetPort: 9583
+    - name: http-9584
+      port: 9584
+      targetPort: 9584
+    - name: http-9585
+      port: 9585
+      targetPort: 9585
+
+    - name: http-9092
+      port: 9092
+      targetPort: 9092
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: com-openbank-service-beneficiaries-002
+spec:
+  selector:
+    app: com-openbank-service-beneficiaries-002
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+
+
