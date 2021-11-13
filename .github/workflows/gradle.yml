@@ -28,3 +28,9 @@ jobs:
       run: micronaut-openbanking-boilerplate/gradlew -p micronaut-openbanking-boilerplate  build
     - name: Build java script client 
       run: micronaut-openbanking-boilerplate/swagger-code-gen-v4.sh -l javascript
+    - name: add to git 
+      run: git add
+    - name: add to git 
+      run: git commit -m "test"
+    - name: add to git 
+      run: git push
