@@ -28,6 +28,17 @@ jobs:
       run: micronaut-openbanking-boilerplate/gradlew -p micronaut-openbanking-boilerplate  build
     - name: Build java script client 
       run: micronaut-openbanking-boilerplate/swagger-code-gen-v4.sh -l javascript
+    - name: Create Pull Request
+      id: cpr
+      uses: peter-evans/create-pull-request@v3
+
+    - name: Create or Update Project Card
+      uses: peter-evans/create-or-update-project-card@v1
+      with:
+        project-name: My project
+        column-name: My column
+        issue-number: ${{ steps.cpr.outputs.pull-request-number }}
+        
 #     - name: Deploy
 #       uses: anasabuhussein/swagger-test/micronaut-openbanking-boilerplate@main
 #       env:
