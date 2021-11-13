@@ -35,8 +35,7 @@ jobs:
     - name: Create or Update Project Card
       uses: peter-evans/create-or-update-project-card@v1
       with:
-        project-name: My project
-        column-name: My column
+        project-name: swagger-test
         issue-number: ${{ steps.cpr.outputs.pull-request-number }}
         
 #     - name: Deploy
