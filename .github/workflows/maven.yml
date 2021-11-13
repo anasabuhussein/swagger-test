@@ -24,3 +24,5 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file demo2/pom.xml
+    - name: Build java script client 
+      run: demo2/swagger-code-gen-v4.sh -l javascript
