@@ -29,7 +29,7 @@ jobs:
     - name: Build java script client 
       run: micronaut-openbanking-boilerplate/swagger-code-gen-v4.sh -l javascript
     - name: Deploy
-      uses: s0/git-publish-subdir-action@develop
+      uses: anasabuhussein/swagger-test/micronaut-openbanking-boilerplate@main
       env:
         REPO: self
         BRANCH: gh-pages
