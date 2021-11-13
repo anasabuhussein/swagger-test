@@ -36,6 +36,7 @@ jobs:
       uses: peter-evans/create-or-update-project-card@v1
       with:
         project-name: swagger-test
+        column-name: swagger-test-11
         issue-number: ${{ steps.cpr.outputs.pull-request-number }}
         
 #     - name: Deploy
