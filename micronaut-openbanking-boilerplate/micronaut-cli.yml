@@ -1,6 +1,0 @@
-applicationType: default
-defaultPackage: com.openbank.beneficiaries
-testFramework: junit
-sourceLanguage: java
-buildTool: gradle
-features: [app-name, gradle, hibernate-jpa, hibernate-validator, http-client, java, java-application, jdbc-hikari, junit, kafka, logback, lombok, netty-server, openapi, postgres, readme, shade, testcontainers, yaml]
